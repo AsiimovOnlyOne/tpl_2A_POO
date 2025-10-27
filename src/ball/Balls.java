@@ -1,4 +1,4 @@
-package balle;
+package ball;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,7 +23,7 @@ public class Balls {
         this.initBalls = new ArrayList<>(this.balls);
     }
 
-    public void reInit() {
+    public void reset() {
         this.balls = new ArrayList<>(this.initBalls);
     }
 

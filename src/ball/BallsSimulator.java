@@ -1,4 +1,4 @@
-package balle;
+package ball;
 
 import gui.GUISimulator;
 import gui.Oval;
@@ -37,7 +37,7 @@ public class BallsSimulator implements Simulable {
 
     @Override
     public void restart() {
-        balls.reInit();
+        balls.reset();
         draw();
     }
 
