@@ -1,24 +1,28 @@
 package cell;
 
 import gui.GUISimulator;
-import gui.Simulable;
 import java.awt.*;
 
-public class ConwaySimulator implements Simulable {
+// Note : "implements Simulable" n'est pas nécessaire ici,
+// car AbstractSimulator l'implémente déjà.
+public class ConwaySimulator extends AbstractSimulator {
 
     private final GUISimulator gui;
-    private final GridConway grid;
 
     public ConwaySimulator(GUISimulator gui) {
-        this.gui = gui;
-        this.grid = new GridConway(100);
-        grid.generateGrid();
+        // 1. Appelle le constructeur parent, qui fait gui.setSimulable(this)
+        super(gui);
 
-        gui.setSimulable(this);
+        // 2. Initialise les variables spécifiques à cette classe
+        this.gui = gui;
+        super.grid = new GridConway(100);
+
+        // 3. Maintenant que tout est initialisé, on peut dessiner
         draw();
     }
 
-    private void draw() {
+    @Override
+    protected void draw() {
         gui.reset(); // Efface la fenêtre avant de redessiner
 
         Cell[][] cells = grid.getGrid(); // Récupère la grille
@@ -29,27 +33,17 @@ public class ConwaySimulator implements Simulable {
             for (int j = 0; j < size; j++) {
                 int x = j * cellSize;
                 int y = i * cellSize;
+                Color color;
 
-                // Si cellule vivante → blanche, sinon → gris foncé
-                Color color = (cells[i][j].isAlive()) ? Color.BLACK : Color.WHITE;
+                // Si cellule vivante → noire, sinon → blanche
+                if (cells[i][j].getState() == 1) {
+                    color = Color.BLACK;
+                } else {color = Color.WHITE;}
 
                 // Dessine un carré rempli pour représenter la cellule
                 gui.addGraphicalElement(new gui.Rectangle(x, y, color, color, cellSize));
             }
         }
-    }
-
-
-    @Override
-    public void next() {
-        grid.next();
-        draw();
-    }
-
-    @Override
-    public void restart() {
-        grid.reset();
-        draw();
     }
 
     public static void main(String[] args) {

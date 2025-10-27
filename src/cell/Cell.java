@@ -2,13 +2,17 @@ package cell;
 
 public class Cell {
 
-    boolean state;
+    int state;
 
-    public Cell(boolean state) {
+    public Cell(int state) {
         this.state = state;
     }
 
-    public boolean isAlive() {
+    public int getState() {
         return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 }
