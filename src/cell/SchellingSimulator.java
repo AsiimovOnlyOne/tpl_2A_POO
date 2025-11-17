@@ -26,7 +26,7 @@ public class SchellingSimulator extends AbstractSimulator {
         // Définition des couleurs : blanc pour vacant, puis rouge, bleu, vert pour les groupes
         this.populationColors = new Color[]{Color.WHITE, Color.RED, Color.BLUE, Color.GREEN};
         
-        // Création de la grille : 50x50, 3 groupes de population (nColors-1), seuil de tolérance = 3
+        // Création de la grille : 50x50, 3 groupes de population, seuil de tolérance = 3
         this.grid = new GridSchelling(50, populationColors.length - 1, 3);
         
         // Affichage initial
