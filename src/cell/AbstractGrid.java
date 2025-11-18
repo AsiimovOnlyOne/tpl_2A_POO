@@ -3,10 +3,19 @@ package cell;
 public abstract class AbstractGrid {
     protected Cell[][] cells;
     protected Cell[][] initCells;
+    protected int nStates;
     protected int size;
 
     public AbstractGrid(int size) {
         this.size = size;
+        this.cells = new Cell[size][size];
+        generateGrid();
+        setInit();
+    }
+
+    public AbstractGrid(int size, int nStates) {
+        this.size = size;
+        this.nStates = nStates;
         this.cells = new Cell[size][size];
         generateGrid();
         setInit();
@@ -70,4 +79,8 @@ public abstract class AbstractGrid {
     public int getSize() {
         return size;
     }
+
+    public int getnStates() {
+        return nStates;
+    }   
 }

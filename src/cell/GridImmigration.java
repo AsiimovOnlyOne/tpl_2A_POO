@@ -1,11 +1,9 @@
 package cell;
 
 public class GridImmigration extends AbstractGrid {
-    private final int nStates;
-
+    
     public GridImmigration(int size, int nStates) {
-        super(size);
-        this.nStates = nStates;
+        super(size, nStates);
     }
 
     @Override
@@ -34,6 +32,15 @@ public class GridImmigration extends AbstractGrid {
         }
 
         return next;
+    }
+
+    @Override
+    public void generateGrid() {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                this.cells[i][j] = new Cell((int) (Math.random() * nStates));
+            }
+        }
     }
 }
 
