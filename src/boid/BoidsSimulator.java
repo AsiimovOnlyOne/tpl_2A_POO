@@ -9,37 +9,41 @@ import java.util.ArrayList;
 public class BoidsSimulator implements Simulable {
 
     private final GUISimulator gui;
-    private final int radius = 15;
-    private final Boids boids;
+    private final Boids boidsone;
+    private final Boids boidstow;
+    private final EventManager events;
 
     public BoidsSimulator(GUISimulator gui) {
         this.gui = gui;
-        this.boids = new Boids();
-        boids.generateBoids(10, gui.getWidth(), gui.getHeight(), radius);
+        this.boidsone = new BoidsPredateur();
+        boidsone.generateBoids(gui.getWidth(), gui.getHeight());
+        this.boidstow = new BoidsProies();
+        boidstow.generateBoids(gui.getWidth(), gui.getHeight());
+        this.events = new EventManager();
 
         gui.setSimulable(this);
-        draw();
-    }
-
-    private void draw() {
-        gui.reset();
-        ArrayList<Point> p = boids.getCoordBoids();
-        ArrayList<Point2D> v = boids.getSpeedBoids();
-        for (int i = 0; i < boids.size(); i++) {
-            gui.addGraphicalElement(new EllipseOrientee(p.get(i).x, p.get(i).y, radius, 2*radius, v.get(i).getX(), v.get(i).getY(), Color.RED));
-        }
     }
 
     @Override
     public void next() {
-        boids.translate(gui.getWidth(), gui.getHeight(), radius);
-        draw();
+        /** on ajoute un event de translation des boids et on l'execute*/
+        gui.reset();
+        this.events.addEvent(new TranslateBoids(0, gui, boidsone));
+        this.events.next();
+        this.events.addEvent(new TranslateBoids(0, gui, boidstow));
+        this.events.next();
+        this.events.addEvent(new TranslateBoids(0, gui, boidstow));
+        this.events.next();
+
     }
 
     @Override
     public void restart() {
-        boids.reset();
-        draw();
+        /** on ajoute un event de reset des boids et on l'execute*/
+        this.events.addEvent(new RestartBoids(0, gui, boidsone));
+        this.events.next();
+        this.events.addEvent(new RestartBoids(0, gui, boidstow));
+        this.events.next();
     }
 
     public static void main(String[] args) {

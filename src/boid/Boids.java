@@ -1,21 +1,21 @@
 package boid;
 
-import java.awt.Point;
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Classe Boids : simulation de boids selon les règles classiques
+ * Classe abstraite Boids (factorisation du code car plusieur type de boids): simulation de boids selon les règles classiques
  * - Cohésion : se rapprocher du centre de masse des voisins
  * - Séparation : éviter les collisions
  * - Alignement : suivre la vitesse moyenne des voisins
  *
- * Cette version inclut :
- * - Wrap-around : les boids qui sortent d'un côté réapparaissent de l'autre
- * - Limitation de vitesse maximale pour éviter les mouvements explosifs
+ * On a inclu les options suivantes :
+ * - les boids qui sortent d'un côté réapparaissent de l'autre
+ * - Limitation de vitesse maximale
  */
-public class Boids {
+public abstract class Boids {
 
     // Positions initiales pour reset
     private ArrayList<Point> initBoids;
@@ -24,6 +24,53 @@ public class Boids {
     // Positions et vitesses actuelles
     private ArrayList<Point> boids;
     private ArrayList<Point2D> velocities;
+
+    // largeur et hauteur de la famille de boids
+    private double largeur;
+    private double hauteur;
+
+    private float vMax; // Vitesse maximale
+
+    private Color couleur; // couleur de la famille
+
+    private int taille;
+
+    protected double getlargeur(){
+        return this.largeur;
+    }
+
+    protected double gethauteur(){
+        return this.hauteur;
+    }
+
+    protected double getvMax(){
+        return this.vMax;
+    }
+
+    protected Color getCouleur(){
+        return this.couleur;
+    }
+
+    protected int getTaille(){
+        return this.taille;
+    }
+
+
+    protected void setlargeur(double largeur){
+        this.largeur = largeur;
+    }
+    protected void sethauteur(double hauteur){
+        this.hauteur = hauteur;
+    }
+    protected void setvMax(double vMax){
+        this.vMax = (float) vMax;
+    }
+    protected void setcouleur(Color couleur){
+        this.couleur = couleur;
+    }
+    protected void setTaille(int taille){
+        this.taille = taille;
+    }
 
     /** Constructeur : initialise les listes vides */
     public Boids() {
@@ -37,8 +84,8 @@ public class Boids {
     }
 
     /** Génère n boids aléatoirement dans l’espace défini par width/height et radius */
-    public void generateBoids(int n, int width, int height, int radius){
-        randomBoids(n, width,height,radius);
+    public void generateBoids(int width, int height){
+        randomBoids(width,height);
         setInit(); // Sauvegarde l’état initial pour reset
     }
 
@@ -71,18 +118,18 @@ public class Boids {
     }
 
     /** Génère n boids aléatoires avec positions et vitesses initiales */
-    public void randomBoids(int n, int width, int height, int radius) {
+    public void randomBoids(int width, int height) {
         Random rand = new Random();
-        this.boids.clear();
-        this.velocities.clear();
+        boids.clear();
+        velocities.clear();
 
-        for (int i = 0; i < n; i++) {
-            int x = rand.nextInt(width - 2 * radius) + radius;
-            int y = rand.nextInt(height - 2 * radius) + radius;
+        for (int i = 0; i < taille; i++) {
+            int x = (int) (rand.nextInt((int) (width - largeur)) + hauteur);
+            int y = (int) (rand.nextInt((int) (height - largeur)) + hauteur);
 
-            // Vitesse aléatoire entre -5 et 5, pas vitesse initiale nulle
-            int dx = rand.nextInt(11) - 5;
-            int dy = rand.nextInt(11) - 5;
+            // Vitesse aléatoire entre -0.25*vMax et 0.25*vMax, pas vitesse initiale nulle
+            int dx = (int) (rand.nextInt(11) - 0.25*vMax);
+            int dy = (int) (rand.nextInt(11) - 0.25*vMax);
             if (dx == 0) dx = 1;
             if (dy == 0) dy = 1;
 
@@ -92,57 +139,16 @@ public class Boids {
 
     /**
      * Calcul de l’accélération pour un boid i selon les règles de Parker
-     * - Cohésion : pcX, pcY
-     * - Séparation : cX, cY
-     * - Alignement : pvX, pvY
      */
-    public Point2D f(int i) {
-        Point pi = boids.get(i);
-        Point2D vi = velocities.get(i);
-
-        float pcX = 0, pcY = 0; // Cohésion
-        float cX = 0, cY = 0;   // Séparation
-        float pvX = 0, pvY = 0; // Alignement
-
-        for (int j = 0; j < boids.size(); j++) {
-            if (i != j) {
-                Point pj = boids.get(j);
-                Point2D vj = velocities.get(j);
-
-                // 1) Cohésion (calcul de centre de masse)
-                pcX += pj.x;
-                pcY += pj.y;
-
-                // 2) Séparation si trop proche
-                if (pi.distance(pj) < 20) {
-                    cX -= pj.x - pi.x;
-                    cY -= pj.y - pi.y;
-                }
-
-                // 3) Alignement, en prenant en compte toute la population
-                pvX += vj.getX();
-                pvY += vj.getY();
-            }
-        }
-
-        // Moyenne et ajustement pour cohésion et alignement, /100f et /8f corresponde aux coef des composantes de chaque forces
-        pcX = (pcX / (boids.size() - 1) - pi.x) / 100f;
-        pcY = (pcY / (boids.size() - 1) - pi.y) / 100f;
-        pvX = (float) ((pvX / (boids.size() - 1) - vi.getX()) / 8f);
-        pvY = (float) ((pvY / (boids.size() - 1) - vi.getY()) / 8f);
-
-        return new Point2D.Float(pcX + cX + pvX, pcY + cY + pvY);
-    }
+    protected abstract Point2D f(int i);
 
     /**
      * Déplace les boids selon les règles de Parker + wrap-around + limite de vitesse
      * @param width largeur de l’écran
      * @param height hauteur de l’écran
-     * @param radius rayon pour éviter la sortie exacte de l’écran
      */
-    public void translate(int width, int height, int radius) {
+    public void translate(int width, int height) {
 
-        float vMax = 8f; // Vitesse maximale
 
         for (int i = 0; i < boids.size(); i++) {
 
@@ -166,18 +172,17 @@ public class Boids {
             int newX = boids.get(i).x + (int) newVx;
             int newY = boids.get(i).y + (int) newVy;
 
-            // 5) Wrap-around
-            if (newX > width - radius) newX = radius;
-            if (newX < radius) newX = width - radius;
-            if (newY > height - radius) newY = radius;
-            if (newY < radius) newY = height - radius;
+            // 5) si un boid sort de l'écran, il reapparait de l'autre
+            if (newX > width - hauteur) newX = (int) hauteur;
+            if (newX < hauteur) newX = (int) (width - hauteur);
+            if (newY > height - hauteur) newY = (int) hauteur;
+            if (newY < hauteur) newY = (int) (height - hauteur);
 
             // 6) Mise à jour finale
             boids.set(i, new Point(newX, newY));
         }
     }
 
-    /** Représentation textuelle des positions des boids */
     @Override
     public String toString(){
         StringBuilder s = new StringBuilder();
