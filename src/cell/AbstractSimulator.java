@@ -6,7 +6,7 @@ import java.awt.*;
 
 public abstract class AbstractSimulator implements Simulable {
 
-    protected GridConway grid;
+    protected AbstractGrid grid; // Modification : protected GridConway grid;
 
     public AbstractSimulator(GUISimulator gui) {
 
