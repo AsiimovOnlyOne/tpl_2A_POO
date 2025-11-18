@@ -16,7 +16,7 @@ public class BoidsProies extends Boids{
         super.sethauteur(5);
         super.setvMax(6f);
         super.setcouleur(Color.blue);
-        super.setTaille(100);
+        super.setTaille(120); // nombre de boids dans la famille
     }
 
     /**
@@ -26,6 +26,16 @@ public class BoidsProies extends Boids{
      * - Alignement : pvX, pvY
      */
     public Point2D f(int i, Boids pred) {
+
+        /**
+         * coefficients a modifier
+         * ils interviennent dans le calcul de la force
+         */
+        float coh = 800f; // plus ce coeff est faible plus la force liée au centre de masse de la famille de boid est élevée
+        float align = 3f; // plus ce coeff est faible plus la force lié à l'alignement est élevée
+        float coh_pred = 30f; // plus ce coeff est faible plus la force repulsive lié au centre de masse des prédateur est élevée
+        float dist_repuls = (float) 2; // plus ce coeff est élevé plus le boid va repérer de loin les proies
+        float peur = (float) 0.1; // plus ce coeff est élevé plus les proies éviteront les prédateurs une fois repéré
 
         ArrayList<Point> boids = super.getCoordBoids();
         ArrayList<Point2D> velocities = super.getSpeedBoids();
@@ -47,7 +57,7 @@ public class BoidsProies extends Boids{
                 pcY += pj.y;
 
                 // 2) Séparation si trop proche
-                if (pi.distance(pj) < super.gethauteur()+super.getlargeur()/4) {
+                if (pi.distance(pj) < (super.gethauteur()+super.getlargeur())/3) {
                     cX -= pj.x - pi.x;
                     cY -= pj.y - pi.y;
                 }
@@ -70,19 +80,21 @@ public class BoidsProies extends Boids{
             pry += pj.y;
 
             // 2) Séparation si trop proche
-            if (pi.distance(pj) < super.gethauteur()+super.getlargeur()*3) {
+            if (pi.distance(pj) < (super.gethauteur()+super.getlargeur())*dist_repuls){
                 crX -= pj.x - pi.x;
                 crY -= pj.y - pi.y;
             }
         }
 
         // Moyenne et ajustement pour cohésion et alignement, les coeffs peuvent etre adaptés en fonction de ce que l'on veut simuler
-        pcX = (pcX / (boids.size() - 1) - pi.x) / 300f;
-        pcY = (pcY / (boids.size() - 1) - pi.y) / 300f;
-        pvX = (float) ((pvX / (boids.size() - 1) - vi.getX()) / 6f);
-        pvY = (float) ((pvY / (boids.size() - 1) - vi.getY()) / 6f);
-        prx = (pcX / (pred.size())) / 30f;
-        pry = (pcY / (pred.size())) / 30f;
-        return new Point2D.Float(pcX + cX + pvX - prx + crX/5, pcY + cY + pvY - pry + crY/5);
+        pcX = (pcX / (boids.size() - 1) - pi.x) / coh;
+        pcY = (pcY / (boids.size() - 1) - pi.y) / coh;
+        pvX = (float) ((pvX / (boids.size() - 1) - vi.getX()) / align);
+        pvY = (float) ((pvY / (boids.size() - 1) - vi.getY()) / align);
+        if(pred.size() != 0){
+            prx = (pcX / (pred.size())) / coh_pred;
+            pry = (pcY / (pred.size())) / coh_pred;
+        }
+        return new Point2D.Float(pcX + cX + pvX - prx + crX*peur, pcY + cY + pvY - pry + crY*peur);
     }
 }
