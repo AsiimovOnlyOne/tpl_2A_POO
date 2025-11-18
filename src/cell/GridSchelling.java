@@ -116,6 +116,15 @@ public class GridSchelling extends AbstractGrid {
         }
     }
 
+    @Override
+    public void generateGrid() {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                this.cells[i][j] = new Cell(Math.random() < 0.3 ? 1 : 0);
+            }
+        }
+    }
+
     /**
      * Détermine si une famille est insatisfaite de son voisinage.
      * Une famille est insatisfaite si elle a strictement plus de 'toleranceThreshold' voisins appartenant à un groupe différent du sien.
@@ -143,6 +152,7 @@ public class GridSchelling extends AbstractGrid {
                 }
             }
         }
+
         
         // La famille est insatisfaite si elle a trop de voisins différents
         return differentNeighborsCount > toleranceThreshold;
