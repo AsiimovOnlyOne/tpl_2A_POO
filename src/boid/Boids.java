@@ -138,7 +138,7 @@ public abstract class Boids {
     }
 
     /**
-     * Calcul de l’accélération pour un boid i selon les règles de Parker
+     * Calcul de l’accélération pour un boid i selon les règles de Parker et l'autre population de boid
      */
     protected abstract Point2D f(int i, Boids b);
 

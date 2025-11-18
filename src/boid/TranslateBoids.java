@@ -2,6 +2,9 @@ package boid;
 
 import gui.GUISimulator;
 
+/**
+ * Sous classe d'evenement de Boid qui translate boid en prenant en compte les interaction avec l'autre famille otherboid
+ */
 public class TranslateBoids extends EventBoids{
 
     private Boids otherboid; // la famille de Boid qui cohabite avec boid
@@ -11,7 +14,7 @@ public class TranslateBoids extends EventBoids{
         this.otherboid = otherboid;
     }
 
-    /** on translate et on dessine */
+    /** on translate */
     @Override
     public void execute(){
         super.getBoids().translate(super.getGui().getWidth(), super.getGui().getHeight(), otherboid);

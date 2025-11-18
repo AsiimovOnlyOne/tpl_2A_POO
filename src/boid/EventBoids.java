@@ -2,6 +2,9 @@ package boid;
 
 import gui.GUISimulator;
 
+/**
+ * Sous classe d'événement pour une famille de boid pour factoriser le code
+ */
 public abstract class EventBoids extends Event {
     private GUISimulator gui;
     private Boids boids;

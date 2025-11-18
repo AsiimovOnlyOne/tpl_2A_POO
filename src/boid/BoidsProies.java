@@ -4,11 +4,14 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+/**
+ * sous classe de boid qui correspond aux boids proies
+ */
 public class BoidsProies extends Boids{
 
     public BoidsProies(){
         super();
-        /** caractéristique de la famille prédateur */
+        /** caractéristique de la famille proies */
         super.setlargeur(30);
         super.sethauteur(5);
         super.setvMax(6f);
@@ -16,7 +19,7 @@ public class BoidsProies extends Boids{
         super.setTaille(100);
     }
 
-        /**
+    /**
      * Calcul de l’accélération pour un boid i selon les règles de Parker
      * - Cohésion : pcX, pcY
      * - Séparation : cX, cY
@@ -55,7 +58,7 @@ public class BoidsProies extends Boids{
             }
         }
 
-        /** par rapport aux predateur, les proies fuient le centre de masse des prédateurs */
+        /** par rapport aux predateur, les proies fuient le centre de masse des prédateurs et se sépare des prédateurs s ils sont trop pres*/
 
         float prx = 0, pry = 0; // fuient le centre de masse des pred
         float crX = 0, crY = 0;   // Séparation des pred
@@ -73,7 +76,7 @@ public class BoidsProies extends Boids{
             }
         }
 
-        // Moyenne et ajustement pour cohésion et alignement, /100f et /8f corresponde aux coef des composantes de chaque forces
+        // Moyenne et ajustement pour cohésion et alignement, les coeffs peuvent etre adaptés en fonction de ce que l'on veut simuler
         pcX = (pcX / (boids.size() - 1) - pi.x) / 300f;
         pcY = (pcY / (boids.size() - 1) - pi.y) / 300f;
         pvX = (float) ((pvX / (boids.size() - 1) - vi.getX()) / 6f);

@@ -6,6 +6,10 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+
+/**
+ * Sous classe d'evenement de Boid qui dessine la famille de boid
+ */
 public class DrawBoids extends EventBoids{
 
     public DrawBoids(int date, GUISimulator gui, Boids boids) {

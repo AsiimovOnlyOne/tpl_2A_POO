@@ -3,8 +3,10 @@ package boid;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Random;
 
+/**
+ * sous classe de boid qui correspond aux boids proies
+ */
 public class BoidsPredateur extends Boids{
 
     public BoidsPredateur(){
@@ -56,7 +58,7 @@ public class BoidsPredateur extends Boids{
             }
         }
 
-        /** par rapport aux proies, les prédateurs sont attirés par le centre de masse des proies */
+        /** par rapport aux proies, les prédateurs sont attirés par le centre de masse des proies et sont d'avantage attiré si elles sont trop praches */
 
         float prx = 0, pry = 0; // Cohésion des proies
         float crX = 0, crY = 0;   // attirance des proies
@@ -74,7 +76,7 @@ public class BoidsPredateur extends Boids{
             }
         }
 
-        // Moyenne et ajustement pour cohésion et alignement, /100f et /8f corresponde aux coef des composantes de chaque forces
+        // Moyenne et ajustement pour cohésion et alignement, les coeffs peuvent etre adaptés en fonction de ce que l'on veut simuler
         pcX = (pcX / (boids.size() - 1) - pi.x) / 800f;
         pcY = (pcY / (boids.size() - 1) - pi.y) / 800f;
         pvX = (float) ((pvX / (boids.size() - 1) - vi.getX()) / 8f);
