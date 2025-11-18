@@ -140,20 +140,21 @@ public abstract class Boids {
     /**
      * Calcul de l’accélération pour un boid i selon les règles de Parker
      */
-    protected abstract Point2D f(int i);
+    protected abstract Point2D f(int i, Boids b);
 
     /**
      * Déplace les boids selon les règles de Parker + wrap-around + limite de vitesse
      * @param width largeur de l’écran
      * @param height hauteur de l’écran
+     * @param b l'autre population de boids
      */
-    public void translate(int width, int height) {
+    public void translate(int width, int height, Boids b) {
 
 
         for (int i = 0; i < boids.size(); i++) {
 
             // 1) Calcul de l’accélération
-            Point2D acc = this.f(i);
+            Point2D acc = this.f(i, b);
 
             // 2) Mise à jour de la vitesse
             float newVx = (float) velocities.get(i).getX() + (float) acc.getX();

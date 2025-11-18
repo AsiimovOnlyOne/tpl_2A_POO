@@ -4,6 +4,7 @@ import gui.GUISimulator;
 
 public class RestartBoids extends EventBoids{
 
+
     public RestartBoids(int date, GUISimulator gui, Boids boids) {
         super(date, gui, boids);
     }
@@ -12,6 +13,5 @@ public class RestartBoids extends EventBoids{
     @Override
     public void execute(){
         super.getBoids().reset();
-        super.draw();
     }
 }

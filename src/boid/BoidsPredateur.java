@@ -12,9 +12,9 @@ public class BoidsPredateur extends Boids{
         /** caractéristique de la famille prédateur */
         super.setlargeur(50);
         super.sethauteur(35);
-        super.setvMax(8f);
+        super.setvMax(6f);
         super.setcouleur(Color.red);
-        super.setTaille(5);
+        super.setTaille(12);
     }
 
         /**
@@ -23,7 +23,7 @@ public class BoidsPredateur extends Boids{
      * - Séparation : cX, cY
      * - Alignement : pvX, pvY
      */
-    public Point2D f(int i) {
+    public Point2D f(int i, Boids proies) {
 
         ArrayList<Point> boids = super.getCoordBoids();
         ArrayList<Point2D> velocities = super.getSpeedBoids();
@@ -45,7 +45,7 @@ public class BoidsPredateur extends Boids{
                 pcY += pj.y;
 
                 // 2) Séparation si trop proche
-                if (pi.distance(pj) < 20) {
+                if (pi.distance(pj) < super.gethauteur()+super.getlargeur()/4) {
                     cX -= pj.x - pi.x;
                     cY -= pj.y - pi.y;
                 }
@@ -56,12 +56,31 @@ public class BoidsPredateur extends Boids{
             }
         }
 
+        /** par rapport aux proies, les prédateurs sont attirés par le centre de masse des proies */
+
+        float prx = 0, pry = 0; // Cohésion des proies
+        float crX = 0, crY = 0;   // attirance des proies
+
+        for (int j = 0; j < proies.size(); j++) {
+            Point pj = proies.getCoordBoids().get(j);
+            // 1) Cohésion (calcul de centre de masse)
+            prx += pj.x;
+            pry += pj.y;
+
+            // 2) attire si trop proche des proies
+            if (pi.distance(pj) < super.gethauteur()+super.getlargeur()*3) {
+                crX += pj.x - pi.x;
+                crY += pj.y - pi.y;
+            }
+        }
+
         // Moyenne et ajustement pour cohésion et alignement, /100f et /8f corresponde aux coef des composantes de chaque forces
-        pcX = (pcX / (boids.size() - 1) - pi.x) / 100f;
-        pcY = (pcY / (boids.size() - 1) - pi.y) / 100f;
+        pcX = (pcX / (boids.size() - 1) - pi.x) / 800f;
+        pcY = (pcY / (boids.size() - 1) - pi.y) / 800f;
         pvX = (float) ((pvX / (boids.size() - 1) - vi.getX()) / 8f);
         pvY = (float) ((pvY / (boids.size() - 1) - vi.getY()) / 8f);
-
-        return new Point2D.Float(pcX + cX + pvX, pcY + cY + pvY);
+        prx = (pcX / (proies.size())) / 100f;
+        pry = (pcY / (proies.size())) / 100f;
+        return new Point2D.Float(pcX + cX + pvX + prx + crX/10, pcY + cY + pvY + pry + crY/10);
     }
 }

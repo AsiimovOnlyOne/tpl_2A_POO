@@ -28,21 +28,37 @@ public class BoidsSimulator implements Simulable {
     public void next() {
         /** on ajoute un event de translation des boids et on l'execute*/
         gui.reset();
-        this.events.addEvent(new TranslateBoids(0, gui, boidsone));
+        this.events.addEvent(new TranslateBoids(0, gui, boidsone, boidstow));
         this.events.next();
-        this.events.addEvent(new TranslateBoids(0, gui, boidstow));
+        this.events.addEvent(new TranslateBoids(0, gui, boidstow, boidsone));
         this.events.next();
-        this.events.addEvent(new TranslateBoids(0, gui, boidstow));
+
+        this.events.addEvent(new DrawBoids(0, gui, boidsone));
+        this.events.next();
+        this.events.addEvent(new DrawBoids(0, gui, boidstow));
+        this.events.next();
+
+        gui.reset();
+        this.events.addEvent(new TranslateBoids(0, gui, boidstow, boidsone));
+        this.events.next();
+
+        this.events.addEvent(new DrawBoids(0, gui, boidsone));
+        this.events.next();
+        this.events.addEvent(new DrawBoids(0, gui, boidstow));
         this.events.next();
 
     }
 
     @Override
     public void restart() {
-        /** on ajoute un event de reset des boids et on l'execute*/
+        /** on ajoute un event de reset des boids et on les dessines*/
         this.events.addEvent(new RestartBoids(0, gui, boidsone));
         this.events.next();
         this.events.addEvent(new RestartBoids(0, gui, boidstow));
+        this.events.next();
+        this.events.addEvent(new DrawBoids(0, gui, boidsone));
+        this.events.next();
+        this.events.addEvent(new DrawBoids(0, gui, boidstow));
         this.events.next();
     }
 
