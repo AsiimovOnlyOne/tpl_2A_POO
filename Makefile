@@ -19,14 +19,31 @@
 #   -sourcepath : répertoire dans lequel sont cherchés les .java
 #   -classpath : répertoire dans lequel sont cherchées les classes compilées (.class et .jar)
 
-all: runTestInvader 
 
-compileTestInvader:
-	javac -d bin -classpath lib/gui.jar src/TestInvader.java
+# Répertoires
+SRC=src
+BIN=bin
+LIB=lib/gui.jar
 
-runTestInvader: compileTestInvader
-	java -classpath bin:lib/gui.jar TestInvader
+# Paramètre SIM
+SIM ?= boid.BoidsSimulator
+
+# Sélection des sources selon la simulation
+ifeq ($(SIM), TestInvader)
+SOURCES = $(SRC)/TestInvader.java
+else ifeq ($(SIM), boid.BoidsSimulator)
+SOURCES = $(shell find $(SRC)/boid -name "*.java")
+else
+$(error La classe SIM "$(SIM)" n'est pas reconnue. Utilise TestInvader ou boids.BoidsSimulator.)
+endif
+
+all: run
+
+compile:
+	javac -d $(BIN) -classpath $(LIB) $(SOURCES)
+
+run: compile
+	java -classpath $(BIN):$(LIB) $(SIM)
 
 clean:
-	rm -rf bin/
-
+	rm -rf $(BIN)
