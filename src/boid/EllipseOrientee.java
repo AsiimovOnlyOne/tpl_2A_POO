@@ -1,9 +1,7 @@
 package boid;
 
-import gui.GUISimulator;
 import gui.GraphicalElement;
 import javax.swing.*;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Color;
@@ -12,10 +10,10 @@ import java.awt.geom.*;
 
 public class EllipseOrientee implements GraphicalElement {
 
-    private double cx, cy;    // centre
-    private double w, h;      // largeur/hauteur
-    private double angle;     // en radians
-    private Color color;
+    final double cx, cy;    // centre
+    final double w, h;      // largeur/hauteur
+    final double angle;     // en radians
+    final Color color;
 
     public EllipseOrientee(double cx, double cy, double w, double h,
                            double vx, double vy, Color color) {

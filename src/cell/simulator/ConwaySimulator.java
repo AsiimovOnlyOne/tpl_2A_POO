@@ -1,5 +1,7 @@
-package cell;
+package cell.simulator;
 
+import cell.Cell;
+import cell.grid.GridConway;
 import gui.GUISimulator;
 import gui.Rectangle; // Import explicite pour plus de clarté
 import java.awt.*;

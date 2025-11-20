@@ -1,4 +1,4 @@
-package boid;
+package boid.model;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -10,7 +10,6 @@ import java.util.Random;
  * - Cohésion : se rapprocher du centre de masse des voisins
  * - Séparation : éviter les collisions
  * - Alignement : suivre la vitesse moyenne des voisins
- *
  * On a inclu les options suivantes :
  * - les boids qui sortent d'un côté réapparaissent de l'autre
  * - Limitation de vitesse maximale
@@ -35,24 +34,16 @@ public abstract class Boids {
 
     private int taille;
 
-    protected double getlargeur(){
+    public double getlargeur(){
         return this.largeur;
     }
 
-    protected double gethauteur(){
+    public double gethauteur(){
         return this.hauteur;
     }
 
-    protected double getvMax(){
-        return this.vMax;
-    }
-
-    protected Color getCouleur(){
+    public Color getCouleur(){
         return this.couleur;
-    }
-
-    protected int getTaille(){
-        return this.taille;
     }
 
 

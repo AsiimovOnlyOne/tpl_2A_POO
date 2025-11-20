@@ -1,10 +1,15 @@
 package boid;
 
+import boid.event.DrawBoids;
+import boid.event.EventManager;
+import boid.event.RestartBoids;
+import boid.event.TranslateBoids;
+import boid.model.Boids;
+import boid.model.BoidsPredateur;
+import boid.model.BoidsProies;
 import gui.GUISimulator;
 import gui.Simulable;
 import java.awt.*;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
 
 /**
  * Classe BoidsSimulator qui implémente la classe Simulable
@@ -57,7 +62,7 @@ public class BoidsSimulator implements Simulable {
 
     @Override
     public void restart() {
-        /** on ajoute un event de reset des boids et on les dessines*/
+        // on ajoute un event de reset des boids et on les dessines
         this.events.addEvent(new RestartBoids(0, gui, boidsone));
         this.events.next();
         this.events.addEvent(new RestartBoids(0, gui, boidstow));

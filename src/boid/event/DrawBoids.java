@@ -1,5 +1,7 @@
-package boid;
+package boid.event;
 
+import boid.EllipseOrientee;
+import boid.model.Boids;
 import gui.GUISimulator;
 
 import java.awt.*;
@@ -10,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Sous classe d'evenement de Boid qui dessine la famille de boid
  */
-public class DrawBoids extends EventBoids{
+public class DrawBoids extends EventBoids {
 
     public DrawBoids(int date, GUISimulator gui, Boids boids) {
         super(date, gui, boids);

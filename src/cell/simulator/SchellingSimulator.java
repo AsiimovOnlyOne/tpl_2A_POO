@@ -1,5 +1,7 @@
-package cell;
+package cell.simulator;
 
+import cell.Cell;
+import cell.grid.GridSchelling;
 import gui.GUISimulator;
 import java.awt.*;
 

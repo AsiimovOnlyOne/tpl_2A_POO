@@ -1,4 +1,6 @@
-package cell;
+package cell.grid;
+
+import cell.Cell;
 
 import java.util.ArrayList;
 import java.util.List;

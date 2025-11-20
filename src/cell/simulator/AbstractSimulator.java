@@ -1,8 +1,8 @@
-package cell;
+package cell.simulator;
 
+import cell.grid.AbstractGrid;
 import gui.GUISimulator;
 import gui.Simulable;
-import java.awt.*;
 
 /**
  * Classe de base abstraite pour tous les simulateurs de grilles.

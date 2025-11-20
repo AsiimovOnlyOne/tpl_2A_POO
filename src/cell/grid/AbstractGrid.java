@@ -1,4 +1,6 @@
-package cell;
+package cell.grid;
+
+import cell.Cell;
 
 public abstract class AbstractGrid {
     protected Cell[][] cells;
