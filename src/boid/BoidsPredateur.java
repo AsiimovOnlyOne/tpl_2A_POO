@@ -32,7 +32,7 @@ public class BoidsPredateur extends Boids{
          */
         float coh = 2000f; // plus ce coef est faible plus la force liée au centre de masse de la famille de boid est élevée conseil 2000f
         float align = 8f; // plus ce coeff est faible plus la force lié à l'alignement est élevée conseil 8f
-        float coh_proies = 100f; // plus ce coeff est faible plus la force repulsive lié au centre de masse des prédateur est élevée conseil 100f
+        float coh_proies = 100f; // plus ce coeff est faible plus la force attractive lié au centre de masse des proies est élevée conseil 100f
         float dist_attir = (float) 2; // plus ce coeff est élevé plus le boid va repérer de loin les proies conseil 2
         float faim = (float) 0.01; // plus ce coeff est élevé plus les prédateur seront attirés par les proies un fois repérés conseil 0.001
 
@@ -86,10 +86,12 @@ public class BoidsPredateur extends Boids{
         }
 
         // Moyenne et ajustement pour cohésion et alignement, les coeffs peuvent etre adaptés en fonction de ce que l'on veut simuler
-        pcX = (pcX / (boids.size() - 1) - pi.x) / coh;
-        pcY = (pcY / (boids.size() - 1) - pi.y) / coh;
-        pvX = (float) ((pvX / (boids.size() - 1) - vi.getX()) / align);
-        pvY = (float) ((pvY / (boids.size() - 1) - vi.getY()) / align);
+        if ((boids.size() - 1) != 0){
+            pcX = (pcX / (boids.size() - 1) - pi.x) / coh;
+            pcY = (pcY / (boids.size() - 1) - pi.y) / coh;
+            pvX = (float) ((pvX / (boids.size() - 1) - vi.getX()) / align);
+            pvY = (float) ((pvY / (boids.size() - 1) - vi.getY()) / align);
+        }
         if (proies.size() != 0){
             prx = (pcX / (proies.size())) / coh_proies;
             pry = (pcY / (proies.size())) / coh_proies;
