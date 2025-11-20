@@ -53,8 +53,8 @@ public abstract class Boids {
     protected void sethauteur(double hauteur){
         this.hauteur = hauteur;
     }
-    protected void setvMax(){
-        this.vMax = (float) 6.0;
+    protected void setvMax(double v){
+        this.vMax = (float) v;
     }
     protected void setcouleur(Color couleur){
         this.couleur = couleur;
