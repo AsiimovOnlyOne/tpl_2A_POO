@@ -10,7 +10,7 @@ public class BallsSimulator implements Simulable {
 
     private final GUISimulator gui;
     private final Balls balls;
-    private final EventManager eventManager; // Ajout du gestionnaire
+    private final EventManager eventManager;
     private final int radius = 15;
 
     public BallsSimulator(GUISimulator gui) {
@@ -31,14 +31,12 @@ public class BallsSimulator implements Simulable {
     private void draw() {
         gui.reset();
         for (Point p : balls.getCoordBalls()) {
-            // Petit rappel : centrer l'ovale
             gui.addGraphicalElement(new gui.Oval(p.x - radius, p.y - radius, Color.BLACK, Color.RED, 2 * radius));
         }
     }
 
     @Override
     public void next() {
-        // Au lieu d'appeler balls.translate() directement, on fait avancer le temps
         eventManager.next();
 
         // Puis on dessine le résultat

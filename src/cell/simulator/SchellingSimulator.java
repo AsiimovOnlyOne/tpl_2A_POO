@@ -1,6 +1,8 @@
 package cell.simulator;
 
 import cell.Cell;
+import cell.event.EventManager;
+import cell.event.GridEvent;
 import cell.grid.GridSchelling;
 import gui.GUISimulator;
 import java.awt.*;
@@ -12,6 +14,9 @@ public class SchellingSimulator extends AbstractSimulator {
 
     /** Interface graphique utilisée pour l'affichage */
     private final GUISimulator gui;
+
+    /** Gestionnaire d'événements */
+    private final EventManager eventManager;
     
     /** Palette de couleurs pour représenter les différents groupes de population
      *  Index 0 : blanc (logement vacant)
@@ -24,13 +29,18 @@ public class SchellingSimulator extends AbstractSimulator {
     public SchellingSimulator(GUISimulator gui) {
         super(gui);
         this.gui = gui;
-        
+
         // Définition des couleurs : blanc pour vacant, puis rouge, bleu, vert pour les groupes
         this.populationColors = new Color[]{Color.WHITE, Color.RED, Color.BLUE, Color.GREEN};
         
         // Création de la grille : 50x50, 3 groupes de population, seuil de tolérance = 3
         this.grid = new GridSchelling(50, populationColors.length - 1, 3);
-        
+
+        // Création et démarrage du gestionnaire d'événement
+        this.eventManager = new EventManager();
+        // On lance le premier événement à t=0
+        this.eventManager.addEvent(new GridEvent(0, grid, eventManager));
+
         // Affichage initial
         drawPopulationGrid();
     }
@@ -71,7 +81,15 @@ public class SchellingSimulator extends AbstractSimulator {
      */
     @Override
     public void next() {
-        grid.next();
+        eventManager.next();  // Fait avancer le temps et exécute GridEvent
+        drawPopulationGrid(); // Dessine le résultat
+    }
+
+    @Override
+    public void restart() {
+        grid.reset();
+        eventManager.reset();
+        eventManager.addEvent(new GridEvent(0, grid, eventManager)); // On relance la machine
         drawPopulationGrid();
     }
 

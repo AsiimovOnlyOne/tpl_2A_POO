@@ -14,7 +14,7 @@ public class BoidsProies extends Boids {
         // caractéristique de la famille proies
         super.setlargeur(30);
         super.sethauteur(5);
-        super.setvMax(6f);
+        super.setvMax();
         super.setcouleur(Color.blue);
         super.setTaille(100);
     }

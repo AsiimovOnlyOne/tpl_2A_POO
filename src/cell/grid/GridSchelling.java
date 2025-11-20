@@ -25,6 +25,10 @@ public class GridSchelling extends AbstractGrid {
     /** Générateur de nombres aléatoires pour l'initialisation et les déménagements */
     private final Random random;
 
+    /** Graine aléatoire stockée pour générer aléatoirement au début de la simulation
+     * En la stockant, on s'assure que notre reset reproduise le même état initial */
+    private final long seed;
+
     /**
      * Constructeur de la grille de Schelling.
      * size Taille de la grille (size x size)
@@ -32,12 +36,30 @@ public class GridSchelling extends AbstractGrid {
      * toleranceThreshold Seuil de tolérance (nombre max de voisins différents)
      */
     public GridSchelling(int size, int numberOfPopulationGroups, int toleranceThreshold) {
-        super(size); 
+        super(size);
         this.numberOfPopulationGroups = numberOfPopulationGroups;
         this.toleranceThreshold = toleranceThreshold;
-        this.random = new Random();
-        
+
+        // 1. On génère une graine aléatoire une seule fois à la création
+        this.seed = new Random().nextLong();
+
+        // 2. On initialise notre Random avec cette graine fixe
+        this.random = new Random(seed);
+
         initializePopulation();
+    }
+
+    /**
+     * Surcharge de la méthode reset pour réinitialiser aussi le hasard.
+     */
+    @Override
+    public void reset() {
+        // 1. On remet les cellules à leur place (logique parente)
+        super.reset();
+
+        // 2. On remet le générateur de hasard au début de sa séquence.
+        // Ainsi, il regénérera exactement la même suite de nombres qu'au premier lancement.
+        this.random.setSeed(this.seed);
     }
 
     /**

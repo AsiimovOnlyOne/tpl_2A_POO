@@ -1,6 +1,8 @@
 package cell.simulator;
 
+import cell.event.EventManager;
 import cell.Cell;
+import cell.event.GridEvent;
 import cell.grid.GridConway;
 import gui.GUISimulator;
 import gui.Rectangle; // Import explicite pour plus de clarté
@@ -11,6 +13,7 @@ public class ConwaySimulator extends AbstractSimulator {
     // On doit stocker 'gui' ici car AbstractSimulator ne le stocke pas dans un champ protégé.
     // C'est nécessaire pour appeler gui.reset() et gui.addGraphicalElement() plus tard.
     private final GUISimulator gui;
+    private final EventManager eventManager; // Ajout du gestionnaire
 
     public ConwaySimulator(GUISimulator gui) {
         // 1. Configuration initiale via le parent (liaison des boutons Next/Restart)
@@ -22,7 +25,26 @@ public class ConwaySimulator extends AbstractSimulator {
         // On utilise la variable 'grid' héritée de AbstractSimulator
         super.grid = new GridConway(100); // Création d'une grille 100x100
 
-        // 3. Premier affichage
+        // 3. Création et démarrage du gestionnaire d'événement
+        this.eventManager = new EventManager();
+        // On lance le premier événement à t=0
+        this.eventManager.addEvent(new GridEvent(0, grid, eventManager));
+
+        // 4. Premier affichage
+        draw();
+    }
+
+    @Override
+    public void next() {
+        eventManager.next(); // Fait avancer le temps et exécute GridEvent
+        draw();              // Dessine le résultat
+    }
+
+    @Override
+    public void restart() {
+        grid.reset();
+        eventManager.reset();
+        eventManager.addEvent(new GridEvent(0, grid, eventManager)); // On relance la machine
         draw();
     }
 

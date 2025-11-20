@@ -14,7 +14,7 @@ public class BoidsPredateur extends Boids {
         // caractéristique de la famille prédateur
         super.setlargeur(50);
         super.sethauteur(35);
-        super.setvMax(6f);
+        super.setvMax();
         super.setcouleur(Color.red);
         super.setTaille(12);
     }
