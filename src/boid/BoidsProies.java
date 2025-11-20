@@ -12,11 +12,11 @@ public class BoidsProies extends Boids{
     public BoidsProies(){
         super();
         /** caractéristique de la famille proies à modifier */
-        super.setlargeur(30); // largeur de la famille
-        super.sethauteur(5); // hauteur de la famille
-        super.setvMax(6f); // le double de la vitesse max de la famille
-        super.setcouleur(Color.blue); // couleur de la famille
-        super.setTaille(120); // nombre de boids dans la famille
+        super.setlargeur(30); // largeur de la famille conseil 30
+        super.sethauteur(5); // hauteur de la famille conseil 5
+        super.setvMax(6f); // le double de la vitesse max de la famille conseil 6f
+        super.setcouleur(Color.blue); // couleur de la famille conseil blue
+        super.setTaille(120); // nombre de boids dans la famille conseil 120
     }
 
     /**
@@ -30,11 +30,11 @@ public class BoidsProies extends Boids{
          * coefficients a modifier
          * ils interviennent dans le calcul de la force
          */
-        float coh = 800f; // plus ce coeff est faible plus la force liée au centre de masse de la famille de boid est élevée
-        float align = 3f; // plus ce coeff est faible plus la force lié à l'alignement est élevée
-        float coh_pred = 30f; // plus ce coeff est faible plus la force repulsive lié au centre de masse des prédateur est élevée
-        float dist_repuls = (float) 2; // plus ce coeff est élevé plus le boid va repérer de loin les proies
-        float peur = (float) 0.1; // plus ce coeff est élevé plus les proies éviteront les prédateurs une fois repéré
+        float coh = 800f; // plus ce coeff est faible plus la force liée au centre de masse de la famille de boid est élevée conseil 800f
+        float align = 3f; // plus ce coeff est faible plus la force lié à l'alignement est élevée conseil 3f
+        float coh_pred = 30f; // plus ce coeff est faible plus la force repulsive lié au centre de masse des prédateur est élevée conseil 30f
+        float dist_repuls = (float) 2; // plus ce coeff est élevé plus le boid va repérer de loin les proies conseil 2
+        float peur = (float) 0.1; // plus ce coeff est élevé plus les proies éviteront les prédateurs une fois repéré conseil 0.1
 
         ArrayList<Point> boids = super.getCoordBoids();
         ArrayList<Point2D> velocities = super.getSpeedBoids();
