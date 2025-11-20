@@ -86,10 +86,12 @@ public class BoidsProies extends Boids{
         }
 
         // Moyenne et ajustement pour cohésion et alignement, les coeffs peuvent etre adaptés en fonction de ce que l'on veut simuler
-        pcX = (pcX / (boids.size() - 1) - pi.x) / coh;
-        pcY = (pcY / (boids.size() - 1) - pi.y) / coh;
-        pvX = (float) ((pvX / (boids.size() - 1) - vi.getX()) / align);
-        pvY = (float) ((pvY / (boids.size() - 1) - vi.getY()) / align);
+        if ((boids.size() - 1) != 0) {
+            pcX = (pcX / (boids.size() - 1) - pi.x) / coh;
+            pcY = (pcY / (boids.size() - 1) - pi.y) / coh;
+            pvX = (float) ((pvX / (boids.size() - 1) - vi.getX()) / align);
+            pvY = (float) ((pvY / (boids.size() - 1) - vi.getY()) / align);
+        }
         if(pred.size() != 0){
             prx = (pcX / (pred.size())) / coh_pred;
             pry = (pcY / (pred.size())) / coh_pred;
