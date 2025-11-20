@@ -26,7 +26,6 @@ public class BoidsProies extends Boids{
      * - Alignement : pvX, pvY
      */
     public Point2D f(int i, Boids pred) {
-
         /**
          * coefficients a modifier
          * ils interviennent dans le calcul de la force
