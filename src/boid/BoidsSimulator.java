@@ -44,7 +44,6 @@ public class BoidsSimulator implements Simulable {
     /** A chaque pas de la simulation, on translate 1 fois les prédateurs et 2 fois les proies puis on dessine le résultat */
     @Override
     public void next() {
-        gui.reset();
         this.events.addEvent(new TranslateBoids(0, gui, boidsone, boidstow));
         this.events.next();
         this.events.addEvent(new TranslateBoids(0, gui, boidstow, boidsone));
@@ -53,6 +52,7 @@ public class BoidsSimulator implements Simulable {
         this.events.addEvent(new TranslateBoids(0, gui, boidstow, boidsone));
         this.events.next();
 
+        gui.reset();
         this.events.addEvent(new DrawBoids(0, gui, boidsone));
         this.events.next();
         this.events.addEvent(new DrawBoids(0, gui, boidstow));
@@ -75,7 +75,7 @@ public class BoidsSimulator implements Simulable {
 
     /** on lance la simulation */
     public static void main(String[] args) {
-        GUISimulator gui = new GUISimulator(1000, 1000, Color.WHITE);
+        GUISimulator gui = new GUISimulator(1000, 1000, Color.black);
         new BoidsSimulator(gui);
     }
 }

@@ -16,7 +16,8 @@ public class ImmigrationSimulator extends AbstractSimulator {
 
         // 2. Initialise les variables spécifiques à cette classe
         this.gui = gui;
-        super.grid = new GridImmigration(100, 4);
+        int NombreEtats = 4;
+        super.grid = new GridImmigration(100, NombreEtats);
 
         // 3. Maintenant que tout est initialisé, on peut dessiner
         draw();

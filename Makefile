@@ -31,6 +31,14 @@ SIM ?= boid.BoidsSimulator
 # Sélection des sources selon la simulation
 ifeq ($(SIM), TestInvader)
 SOURCES = $(SRC)/TestInvader.java
+else ifeq ($(SIM), ball.BallsSimulator)
+SOURCES = $(shell find $(SRC)/ball -name "*.java")
+else ifeq ($(SIM), cell.ConwaySimulator)
+SOURCES = $(shell find $(SRC)/cell -name "*.java")
+else ifeq ($(SIM), cell.ImmigrationSimulator)
+SOURCES = $(shell find $(SRC)/cell -name "*.java")
+else ifeq ($(SIM), cell.SchellingSimulator)
+SOURCES = $(shell find $(SRC)/cell -name "*.java")
 else ifeq ($(SIM), boid.BoidsSimulator)
 SOURCES = $(shell find $(SRC)/boid -name "*.java")
 else
