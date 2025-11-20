@@ -11,11 +11,11 @@ public class BoidsPredateur extends Boids{
 
     public BoidsPredateur(){
         super();
-        /** caractéristique de la famille prédateur */
-        super.setlargeur(50);
-        super.sethauteur(35);
-        super.setvMax(6f);
-        super.setcouleur(Color.red);
+        /** caractéristique de la famille prédateur à modifier*/
+        super.setlargeur(50); // largeur de la famille
+        super.sethauteur(35); // hauteur de la famille
+        super.setvMax(6f); // vitesse max de la famille
+        super.setcouleur(Color.red); // couleur de la famille
         super.setTaille(12); // nomble de bois dans la famille
     }
 
