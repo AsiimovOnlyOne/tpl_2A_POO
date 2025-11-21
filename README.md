@@ -1,32 +1,61 @@
 # TPL 2A POO
 
-Les ressources distribuées contiennent:
+Présent dans chaque package:
 
-- une librairie d'affichage graphique d'un simulateur (lib/gui.jar) et sa documentation (doc/index.html)
-- un fichier de démonstration du simulateur (src/TestInvader.java)
+**Architecture Événementielle** : Utilisation d'un *EventManager* pour découpler le temps de la logique.
+*Event.java* : 
+définit une structure générique d’événement, représente toute action programmée 
+*EventManager.java* : 
+exécute les événements dans l’ordre chronologique
+##**BALL**
+	-> Objectif du package **ball** : Simulation basique de particules.
+*Balls.java* : Gère une liste de balles, leurs positions et leurs rebonds sur les murs.
+*BallsSimulator.java* : Le contrôleur qui lie le modèle Balls à l'interface graphique et au gestionnaire d'événements.
+
+**/event**
+BallsMoveEvent.java : L'événement discret responsable du déplacement des balles à chaque pas de temps.
 
 
-## Compilation & exécution
-### Avec un makefile?
-Un fichier Makefile est distribué pour facilement compiler et exécuter le fichier TestInvader.java
 
-Mais vu la taille de ce projet, il est ***très fortement recommandé d'utiliser un IDE*** pour compiler, exécuter et déboguer votre code!
+##**CELL**
+-> Objectif du package **cell**: fournir une architecture générique pour simuler des automates cellulaires, dont les modèles de ségrégation sont variés. 
 
-### IDE Idea Intellij
-- créer un nouveau projet:
-    - menu *File/New Project*
-    - si le répertoire distribué est dans "~/Ensimag/2A/POO/TPL_2A_POO", alors paramétrer les champs *Name* avec "TPL_2A_POO" et *Location* avec "~/Ensimag/2A/POO/"
-    - configurer l'utilisation de la librairie
-    - menu *File/Project Structure* puis *Projet setting/Modules*
-    - clicker sur(*Add* puis "JARs & Directories" et sélectionner ~/Ensimag/2A/POO/TPL_2A_POO/lib
-    - vous pouvez bien sûr utiliser git via l'interface d'idea Intellij
+*Cell.java*: Représente une cellule unique dans la grille. Elle ne connaît pas sa position, seulement son état courant.
 
-### IDE VS Code
-- dans "~/Ensimag/2A/POO/TPL_2A_POO", lancer *code ."
-- si vous avez installé les bonnes extensions java (exécution, debogage...) il est possible que tout fonctionne sans rien faire de spécial.
-- s'il ne trouve pas la librairie, vous devez alors créer un vrai "projet" et configurer l'import du .jar.
-- pas vraiment d'aide pour ça, vous trouverez
-- vous pouvez bien sûr utiliser git via l'interface de VS code
+**/grid**
+*AbstractGrid.java*: factorise le code des grid
+*GridConway.java* et *GridImmigration.java*: 
+Implémentation concrète des automates de Conway et du jeu de l’immigration, ces programmes calculent les nouveaux états en suivant les règles de leur automate.
+*GridSchelling.java*: implémentation concrète de l’automate de Schelling. Néanmoins, Schelling ne suit pas un automate cellulaire classique donc contrairement à Conway/Immigration, la transition n’est pas une simple règle locale d’où la redéfinition de next().
 
-### FAQ (étudiants ou non)
-- Q1) Pour le jeu de la vie, il est indiqué que la grille est circulaire. En revanche, aucune indication n'est donnée pour le jeu de l'immigration ni pour le jeu de Schelling. Faut-il également adopter une grille circulaire ? R1) Oui. Pour le calcul des voisinages, toutes les grilles sont considérées comme circulaires. 
+**/simulator**
+*AbstractSimulator.java*: factorise le code des simulator
+*ConwaySimulator.java* et *ImmigrationSimulator.java* et *SchellingSimulator.java*: 
+Facilite la gestion des simulateurs graphiques à l’image des autres simulateurs aussi implémenter. 
+
+**/event**
+*GridEvent.java* : Événement périodique qui déclenche la méthode next() d'une grille.
+
+##**BOID**
+	-> Objectif du package **boid** : simuler le déplacement d’agents en essaim, puis de comportement de cohabitation
+
+*BoidsSimulator.java* :
+implémente la classe Simulable ce qui permet la réalisation de l’interface
+*EllipseOrientee.java* : 
+classe qui implémente GraphicalElement ce qui permet de dessiner dans GUI des ellipses dans toutes les positions, c’est avec cette classe qu’on dessine nos boids dans DrawBoids
+
+**/event**
+*EventBoids.java* : 
+sous classe de Event pour une famille de boid pour factoriser le code pour les événements qui manipulent des boids 
+*RestartBoids.java* : 
+sous classe de EventBoids qui reset la famille de boid
+*TranslateBoids.java* : 
+sous classe de EventBoids qui translate les boids en prenant compte les interactions avec l’autre famille de boid
+*DrawBoids.java*: 
+sous classe de EventBoids qui dessine la famille de boid
+
+**/model**
+*Boids.java* :
+défini la classe abstraite Boids, on a une factorisation du code car il y a plusieurs types de Boids (Prédateur et Proies)
+*BoidsPredateurs.java*  et *BoidsProies.java* : 
+sous classes de Boids qui implémentent différemment la fonction f qui définit l'accélération des boids, et donc leur comportement
