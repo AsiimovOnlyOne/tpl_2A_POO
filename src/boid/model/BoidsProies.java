@@ -11,13 +11,14 @@ public class BoidsProies extends Boids {
 
     public BoidsProies(){
         super();
-        // caractéristique de la famille proies
-        super.setlargeur(30);
-        super.sethauteur(5);
-        super.setvMax(6.5);
-        super.setcouleur(Color.blue);
-        super.setTaille(100);
+        /** caractéristique de la famille proies à modifier */
+        super.setlargeur(30); // largeur
+        super.sethauteur(5); // hauteur
+        super.setvMax(6.5); // vitesse max / 2
+        super.setcouleur(Color.blue); // couleur
+        super.setTaille(120); // nombre de boids dans la famille
     }
+
 
     /**
      * Calcul de l’accélération pour un boid i selon les règles de Parker
@@ -26,6 +27,14 @@ public class BoidsProies extends Boids {
      * - Alignement : pvX, pvY
      */
     public Point2D f(int i, Boids pred) {
+
+        /** Parametre de la force exercée sur chaque boids à modifier */
+        float coef_centre_masse_boids = 1/200f; // plus ce coef est élevé, plus la force liée au centre de masse de boids de la meme famille est élevée
+        float coef_alignement = 1/6f; // plus ce coef est élevé, plus la force liée à l'alignement des boids de la meme famille est élevée
+        float coef_centre_masse_pred = 1/1500f; // plus ce coef est élevé, plus la force répulsive liée au centre de masse des prédateurs
+        float peur = 1/10f; // plus ce coef est élevé, plus la force attiractive liée au proies repérées est élevée
+        float dist_repere_pred = 1f; // plus ce coef est élevé, plus le boids repère les proies de loin
+
 
         ArrayList<Point> boids = super.getCoordBoids();
         ArrayList<Point2D> velocities = super.getSpeedBoids();
@@ -64,25 +73,33 @@ public class BoidsProies extends Boids {
         float crX = 0, crY = 0;   // Séparation des pred
 
         for (int j = 0; j < pred.size(); j++) {
-            Point pj = pred.getCoordBoids().get(j);
-            // 1) Cohésion (calcul de centre de masse)
-            prx += pj.x;
-            pry += pj.y;
+            if(i != j) {
+                Point pj = pred.getCoordBoids().get(j);
+                // 1) Cohésion (calcul de centre de masse)
+                prx += pj.x;
+                pry += pj.y;
 
-            // 2) Séparation si trop proche
-            if (pi.distance(pj) < super.gethauteur()+super.getlargeur()*3) {
-                crX -= pj.x - pi.x;
-                crY -= pj.y - pi.y;
+                // 2) Séparation si trop proche
+                if (pi.distance(pj) < (pred.gethauteur()+pred.getlargeur())*dist_repere_pred) {
+                    crX -= pj.x - pi.x;
+                    crY -= pj.y - pi.y;
+                }
             }
         }
 
         // Moyenne et ajustement pour cohésion et alignement, les coeffs peuvent etre adaptés en fonction de ce que l'on veut simuler
-        pcX = (pcX / (boids.size() - 1) - pi.x) / 300f;
-        pcY = (pcY / (boids.size() - 1) - pi.y) / 300f;
-        pvX = (float) ((pvX / (boids.size() - 1) - vi.getX()) / 6f);
-        pvY = (float) ((pvY / (boids.size() - 1) - vi.getY()) / 6f);
-        prx = (pcX / (pred.size())) / 30f;
-        pry = (pcY / (pred.size())) / 30f;
-        return new Point2D.Float(pcX + cX + pvX - prx + crX/5, pcY + cY + pvY - pry + crY/5);
+        if (boids.size() - 1 != 0){
+            pcX = ((pcX / (boids.size() - 1)) - pi.x)*coef_centre_masse_boids;
+            pcY = ((pcY / (boids.size() - 1)) - pi.y)*coef_centre_masse_boids;
+        }
+        pvX = (float) ((pvX / (boids.size() - 1) - vi.getX()))*coef_alignement;
+        pvY = (float) ((pvY / (boids.size() - 1) - vi.getY()))*coef_alignement;
+
+        if (pred.size() != 0){
+            prx = ((prx / (pred.size())) - pi.x)*coef_centre_masse_pred;
+            pry = ((pry / (pred.size())) - pi.y)*coef_centre_masse_pred;
+        }
+
+        return new Point2D.Float(pcX + cX*10+ pvX - prx + crX*peur, pcY + cY*10 + pvY - pry + crY*peur);
     }
 }
